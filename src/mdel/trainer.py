@@ -228,24 +228,22 @@ def main():
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
-    # TrainingArguments(
-    #     report_to="wandb"
-    # )
 
-    # import wandb
+
+
+
+    import wandb
 
     os.environ["WANDB_API_KEY"] = "d8216641d549f9bb3d0c5074baa39e15dfd55030"
         # wandb_name = training_conf.model_name.replace(os.getenv("HOME", "/home/ubuntu"), "")
 
 
-    # wandb.init(
-    #     project="MDEL",
-    #     entity="jordanclive",
-    #     name=f"mdel_test",
-    #     # config=training_conf,
-    # )
-
-
+    wandb.init(
+        project="MDEL",
+        entity="jordanclive",
+        name=f"mdel_test",
+        # config=training_conf,
+    )
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
@@ -311,6 +309,7 @@ def main():
     #
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
+    data_args.dataset_name = 'jordiclive/uspto2'
     if data_args.dataset_name is not None:
         # Downloading and loading a dataset from the hub.
         raw_datasets = load_dataset(
@@ -582,12 +581,16 @@ def main():
             preds = preds[:, :-1].reshape(-1)
             return metric.compute(predictions=preds, references=labels)
 
+    # eval_dataset = eval_dataset.train_test_split(test_size=0.0001)['test']
+    # eval_datasets = {'pile':}
     # Initialize our Trainer
+    eval_datasets = {'pile': lm_datasets['validation_pile'].train_test_split(test_size=0.0001)['test'],'domain:': lm_datasets['validation_domain'].train_test_split(test_size=0.0001)['test']}
     trainer = Trainer(
+
         model=model,
         args=training_args,
         train_dataset=train_dataset if training_args.do_train else None,
-        eval_dataset=eval_dataset if training_args.do_eval else None,
+        eval_dataset=eval_datasets if training_args.do_eval else None,
         tokenizer=tokenizer,
         # Data collator will default to DataCollatorWithPadding, so we change it.
         data_collator=default_data_collator,
@@ -643,7 +646,7 @@ def main():
             kwargs["dataset"] = f"{data_args.dataset_name} {data_args.dataset_config_name}"
         else:
             kwargs["dataset"] = data_args.dataset_name
-
+    training_args.push_to_hub = True
     if training_args.push_to_hub:
         trainer.push_to_hub(**kwargs)
     else:

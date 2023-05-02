@@ -7,7 +7,7 @@ export WANDB_PROJECT=pythia-1b-deduped-layer-test-$DATASET
 export WANDB_NAME="layer_$TRAINING_LAYER"
 accelerate launch trainer.py \
         --dataset_name Multi-Domain-Expert-Layers/$DATASET \
-        --model_name_or_path EleutherAI/pythia-1b-deduped \
+        --model_name_or_path EleutherAI/pythia-70m-deduped \
         --output_dir "ckpts/pythia-1b-deduped/$DATASET/layer_$TRAINING_LAYER" \
         --training_layers $TRAINING_LAYER \
         --per_device_train_batch_size 1 \
@@ -20,7 +20,7 @@ accelerate launch trainer.py \
         --do_train \
         --do_eval \
         --evaluation_strategy steps \
-        --eval_steps 200 \
+        --eval_steps 1 \
         --overwrite_output_dir \
         --logging_steps 20 \
         --max_steps 1000
