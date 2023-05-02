@@ -41,7 +41,9 @@ from transformers.testing_utils import CaptureLogger
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import send_example_telemetry
 from transformers.utils.versions import require_version
-
+import os
+os.environ['DATASET'] = 'uspto'
+os.environ['TRAINING_LAYER'] = '9,10,11,12,13'
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
 # check_min_version("4.28.0.dev0")
 
@@ -226,6 +228,24 @@ def main():
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
+    # TrainingArguments(
+    #     report_to="wandb"
+    # )
+
+    # import wandb
+
+    os.environ["WANDB_API_KEY"] = "d8216641d549f9bb3d0c5074baa39e15dfd55030"
+        # wandb_name = training_conf.model_name.replace(os.getenv("HOME", "/home/ubuntu"), "")
+
+
+    # wandb.init(
+    #     project="MDEL",
+    #     entity="jordanclive",
+    #     name=f"mdel_test",
+    #     # config=training_conf,
+    # )
+
+
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
