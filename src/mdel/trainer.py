@@ -282,7 +282,7 @@ def main():
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments, UploadArguments))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
-        model_args, data_args, training_args, upload_args = parser.parse_yaml_file(yaml_file="/Users/jordanclive/Desktop/MDEL/src/mdel/configs/config.yaml")
+        model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[1])
     else:
         model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
     # if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
