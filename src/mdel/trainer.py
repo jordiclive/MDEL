@@ -281,7 +281,10 @@ def main():
     # We now keep distinct sets of args, for a cleaner separation of concerns.
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments, UploadArguments))
-    if sys.argv[2].endswith(".yaml"):
+    print('0', sys.argv[0])
+    print('1', sys.argv[1])
+    print('2', sys.argv[2])
+    if sys.argv[0].endswith(".yaml"):
         model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[1])
     else:
         model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
