@@ -284,6 +284,7 @@ def main():
 
     if sys.argv[2].endswith(".yaml"):
         model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[2])
+        training_args.local_rank = sys.argv[1]
     else:
         model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
     # if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
