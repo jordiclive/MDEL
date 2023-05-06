@@ -15,7 +15,6 @@ evaluation_strategy: "steps"
 save_total_limit: 2
 max_grad_norm: 2.0
 save_steps: 1
-optimizer: "adamw_hf"
 eval_steps: 1
 overwrite_output_dir: true
 logging_steps: 20
