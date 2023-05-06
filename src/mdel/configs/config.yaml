@@ -19,7 +19,7 @@ optimizer: "adamw_hf"
 eval_steps: 1
 overwrite_output_dir: true
 logging_steps: 20
-deepspeed: "/fsx/home-jordiclive/MDEL/src/mdl/configs/zero_config.json"
+deepspeed: "/fsx/home-jordiclive/MDEL/src/mdel/configs/zero_config.json"
 fp16: true
 wandb_entity: "ontocord"
 wandb_project: "jordi_testing"
