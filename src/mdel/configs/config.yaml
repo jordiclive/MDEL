@@ -22,3 +22,5 @@ deepspeed: "/fsx/home-jordiclive/MDEL/src/mdel/configs/zero_config.json"
 fp16: true
 wandb_entity: "ontocord"
 wandb_project: "jordi_testing"
+
+#  layer_9,10,11,12,13
