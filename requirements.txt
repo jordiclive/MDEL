@@ -9,3 +9,5 @@ tqdm~=4.65.0
 transformers~=4.28.1
 ujson~=5.7.0
 zstandard~=0.21.0
+wandb
+deepspeed
