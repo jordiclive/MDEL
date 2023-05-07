@@ -1,4 +1,4 @@
-dataset_name: Multi-Domain-Expert-Layers/uspto
+dataset_name: jordiclive/uspto2
 model_name_or_path: "EleutherAI/pythia-1b-deduped"
 output_dir: "layer9"
 training_layers: "4,5"

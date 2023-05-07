@@ -285,16 +285,8 @@ def main():
     if sys.argv[-1].endswith(".yaml"):
         model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[-1])
         training_args.local_rank = int(sys.argv[-2][-1])
-        print(sys.argv[-2])
     else:
         model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
-    # if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
-    #     # If we pass only one argument to the script and it's the path to a json file,
-    #     # let's parse it to get our arguments.
-    #     model_args, data_args, training_args, upload_args = parser.parse_json_file(
-    #         json_file=os.path.abspath(sys.argv[1]))
-    # else:
-    #     model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
 
     if training_args.report_to[0] == "wandb" and (not training_args.deepspeed or training_args.local_rank == 0):
         os.environ["WANDB_API_KEY"] = "d8216641d549f9bb3d0c5074baa39e15dfd55030"
