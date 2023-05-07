@@ -1,5 +1,6 @@
 accelerate~=0.18.0
 datasets~=2.11.0
+deepspeed
 evaluate~=0.4.0
 pre-commit~=2.21.0
 scikit-learn~=1.2.2
@@ -8,6 +9,5 @@ torch~=2.0.0
 tqdm~=4.65.0
 transformers~=4.28.1
 ujson~=5.7.0
-zstandard~=0.21.0
 wandb
-deepspeed
+zstandard~=0.21.0

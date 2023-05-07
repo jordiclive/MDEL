@@ -1,8 +1,8 @@
 dataset_name: Multi-Domain-Expert-Layers/arxiv
 model_name_or_path: EleutherAI/pythia-1b-deduped
 output_dir: "ckpts/pythia-1b-deduped/uspto/layer_9,10,11,12,13"
-per_device_train_batch_size: 1
-per_device_eval_batch_size: 8
+per_device_train_batch_size: 64
+per_device_eval_batch_size: 64
 preprocessing_num_workers: 32
 learning_rate: 0.0001
 block_size: 512
@@ -17,5 +17,6 @@ logging_steps: 20
 push_to_hub: true
 push_to_hub_model_id: all_layers_all_domains
 push_to_hub_organization: Multi-Domain-Expert-Layers
+fp16: true
 wandb_entity: "ontocord"
 wandb_project: "jordi_testing"

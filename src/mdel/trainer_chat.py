@@ -411,7 +411,7 @@ def main():
             "You are instantiating a new tokenizer from scratch. This is not supported by this script."
             "You can do it from another script, save it, and load it from here, using --tokenizer_name."
         )
-    
+
     #we add pad token not present in pythia models
     tokenizer.pad_token_id = 0
 
@@ -482,7 +482,7 @@ def main():
                 else:
                     labels.append(input_ids)
             tokenized_examples["labels"] = labels
-            
+
         # clm input could be much much longer than block_size
         if "Token indices sequence length is longer than the" in cl.out:
             tok_logger.warning(
