@@ -285,6 +285,9 @@ def main():
     if sys.argv[-1].endswith(".yaml"):
         model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[-1])
         training_args.local_rank = int(sys.argv[-2][-1])
+
+        # training_args.push_to_hub_model_id = f"expert-{os.environ['DATASET']}"
+
     else:
         model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
 
@@ -659,6 +662,35 @@ def main():
         else None,
     )
 
+    # Get data
+    train_loader = trainer.get_train_dataloader()
+    from torch.utils.data import DataLoader
+
+    def dataloader_to_list(dataloader, num_batches=8000):
+        data = []
+        for idx, batch in enumerate(dataloader):
+            if idx >= num_batches:
+                break
+            data.append(batch)
+        return data
+
+    from datasets import Dataset
+
+    def list_to_hf_dataset(data_list):
+        keys = data_list[0].keys()
+        data_dict = {key: [] for key in keys}
+
+        for batch in data_list:
+            for key in keys:
+                data_dict[key].extend(batch[key].tolist())
+
+        hf_dataset = Dataset.from_dict(data_dict)
+        return hf_dataset
+
+    data_list = dataloader_to_list(train_loader, 8000)
+    hf_dataset = list_to_hf_dataset(data_list)
+    hf_dataset.save_to_disk(f"full_datasets/{data_args.dataset_name.split('/')[-1]}")
+    raise ValueError("Done")
     # Training
     if training_args.do_train:
         checkpoint = None
