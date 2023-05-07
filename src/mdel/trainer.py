@@ -288,6 +288,7 @@ def main():
         data_args.dataset_name = ['philpapers',"pubmed_central","freelaw","pubmed_abstracts","arxiv","github"]
         already_done = os.listdir("full_datasets")
         todo = list(set(data_args.dataset_name) - set(already_done))
+        print('DATASET',todo[0])
         data_args.dataset_name = f"Multi-Domain-Expert-Layers/{todo[0]}"
 
         # training_args.push_to_hub_model_id = f"expert-{os.environ['DATASET']}"
