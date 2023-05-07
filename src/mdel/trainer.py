@@ -285,7 +285,7 @@ def main():
     if sys.argv[-1].endswith(".yaml"):
         model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[-1])
         training_args.local_rank = int(sys.argv[-2][-1])
-        data_args.dataset_name = ['philpapers',"pubmed_central","freelaw","pubmed_abstracts","arxiv","github"]
+        data_args.dataset_name = ['uspto']
         already_done = os.listdir("full_datasets")
         todo = list(set(data_args.dataset_name) - set(already_done))
         print('DATASET',todo[0])
