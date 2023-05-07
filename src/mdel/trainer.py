@@ -654,12 +654,12 @@ def main():
 ]
     for i,k in enumerate(folder_names):
         if i == 0:
-            train_datasets =  load_from_disk("full_datasets/"+k+"/train")
+            train_datasets =  load_from_disk("/fsx/home-jordiclive/MDEL/src/mdel/full_datasets/"+k+"/train")
         else:
-            train_datasets = datasets.concatenate_datasets([train_datasets, load_from_disk("full_datasets/"+k+"/train")])
+            train_datasets = datasets.concatenate_datasets([train_datasets, load_from_disk("/fsx/home-jordiclive/MDEL/src/mdel/full_datasets/"+k+"/train")])
     val_datasets = {}
     for i,k in enumerate(folder_names):
-        val_datasets[k]  =  load_from_disk("full_datasets/"+k+"/val")
+        val_datasets[k]  =  load_from_disk("/fsx/home-jordiclive/MDEL/src/mdel/full_datasets/"+k+"/val")
 
     trainer = Trainer(
         model=model,
