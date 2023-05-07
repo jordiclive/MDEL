@@ -16,7 +16,7 @@ overwrite_output_dir: true
 logging_steps: 20
 max_steps: 1000
 push_to_hub: true
-push_to_hub_model_id: expert-uspto
+push_to_hub_model_id: all_layers_all_domains
 push_to_hub_organization: Multi-Domain-Expert-Layers
 wandb_entity: "ontocord"
 wandb_project: "jordi_testing"
