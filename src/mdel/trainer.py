@@ -281,20 +281,21 @@ def main():
     # We now keep distinct sets of args, for a cleaner separation of concerns.
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments, UploadArguments))
+    model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[-1])
 
-    if sys.argv[-1].endswith(".yaml"):
-        model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[-1])
-        training_args.local_rank = int(sys.argv[-2][-1])
-        data_args.dataset_name = ['philpapers',"pubmed_central","freelaw","pubmed_abstracts","arxiv","github"]
-        already_done = os.listdir("full_datasets")
-        todo = list(set(data_args.dataset_name) - set(already_done))
-        todo[0] = 'uspto'
-        data_args.dataset_name = f"Multi-Domain-Expert-Layers/{todo[0]}"
-
-        # training_args.push_to_hub_model_id = f"expert-{os.environ['DATASET']}"
-
-    else:
-        model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
+    # if sys.argv[-1].endswith(".yaml"):
+    #     model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[-1])
+    #     training_args.local_rank = int(sys.argv[-2][-1])
+    #     data_args.dataset_name = ['philpapers',"pubmed_central","freelaw","pubmed_abstracts","arxiv","github"]
+    #     already_done = os.listdir("full_datasets")
+    #     todo = list(set(data_args.dataset_name) - set(already_done))
+    #     todo[0] = 'uspto'
+    #     data_args.dataset_name = f"Multi-Domain-Expert-Layers/{todo[0]}"
+    #
+    #     # training_args.push_to_hub_model_id = f"expert-{os.environ['DATASET']}"
+    #
+    # else:
+    #     model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
 
     if training_args.report_to[0] == "wandb" and (not training_args.deepspeed or training_args.local_rank == 0):
         os.environ["WANDB_API_KEY"] = "d8216641d549f9bb3d0c5074baa39e15dfd55030"
@@ -531,6 +532,10 @@ def main():
     # logger loading before tokenize_function
     tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
 
+
+    max_train_samples = 16000
+    raw_datasets["train"] = raw_datasets["train"].select(range(max_train_samples))
+    raw_datasets["validation"] = raw_datasets["validation"].select(range(8000))
     def tokenize_function(examples):
         with CaptureLogger(tok_logger) as cl:
             output = tokenizer(examples[text_column_name])
@@ -615,7 +620,6 @@ def main():
                 group_texts,
                 batched=True,
             )
-
     if training_args.do_train:
         if "train" not in tokenized_datasets:
             raise ValueError("--do_train requires a train dataset")
@@ -656,7 +660,7 @@ def main():
         model=model,
         args=training_args,
         train_dataset=train_dataset if training_args.do_train else None,
-        eval_dataset=eval_datasets if training_args.do_eval else None,
+        eval_dataset=eval_datasets['validation'] if training_args.do_eval else None,
         tokenizer=tokenizer,
         # Data collator will default to DataCollatorWithPadding, so we change
         # it.
