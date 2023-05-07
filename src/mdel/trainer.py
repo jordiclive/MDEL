@@ -668,6 +668,7 @@ def main():
 
     # Get data
     train_loader = trainer.get_train_dataloader()
+    eval_loader = trainer.get_eval_dataloader()
     from torch.utils.data import DataLoader
 
     def dataloader_to_list(dataloader, num_batches=8000):
@@ -693,7 +694,15 @@ def main():
 
     data_list = dataloader_to_list(train_loader, 8000)
     hf_dataset = list_to_hf_dataset(data_list)
-    hf_dataset.save_to_disk(f"full_datasets/{data_args.dataset_name.split('/')[-1]}")
+    path = f"full_datasets/{data_args.dataset_name.split('/')[-1]}"
+    os.makedirs(path + '/train', exist_ok=True)
+    hf_dataset.save_to_disk(f"full_datasets/{data_args.dataset_name.split('/')[-1]}/train")
+
+    data_list = dataloader_to_list(eval_loader, 8*200)
+    hf_dataset = list_to_hf_dataset(data_list)
+    path = f"full_datasets/{data_args.dataset_name.split('/')[-1]}"
+    os.makedirs(path + '/val', exist_ok=True)
+    hf_dataset.save_to_disk(f"full_datasets/{data_args.dataset_name.split('/')[-1]}/val")
     raise ValueError("Done")
     # Training
     if training_args.do_train:
