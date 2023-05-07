@@ -1,5 +1,5 @@
-dataset_name: Multi-Domain-Expert-Layers/uspto
-model_name_or_path: "EleutherAI/pythia-1b-deduped"
+dataset_name: jordiclive/uspto2
+model_name_or_path: "EleutherAI/pythia-70m-deduped"
 output_dir: "layer9"
 training_layers: "4,5"
 per_device_train_batch_size: 32
@@ -15,11 +15,9 @@ evaluation_strategy: "steps"
 save_total_limit: 2
 max_grad_norm: 2.0
 save_steps: 1
+eval_steps: 1
+max_steps: 1
 overwrite_output_dir: true
 logging_steps: 20
-deepspeed: "/fsx/home-jordiclive/MDEL/src/mdel/configs/zero_config.json"
-fp16: true
 wandb_entity: "ontocord"
 wandb_project: "jordi_testing"
-
-#  layer_9,10,11,12,13
