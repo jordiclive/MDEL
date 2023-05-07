@@ -660,12 +660,11 @@ def main():
     val_datasets = {}
     for i,k in enumerate(folder_names):
         val_datasets[k]  =  load_from_disk("/fsx/home-jordiclive/MDEL/src/mdel/full_datasets/"+k+"/val")
-
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=train_dataset if training_args.do_train else None,
-        eval_dataset=eval_datasets['validation'] if training_args.do_eval else None,
+        train_dataset=train_datasets
+        eval_dataset=val_datasets,
         tokenizer=tokenizer,
         # Data collator will default to DataCollatorWithPadding, so we change
         # it.
