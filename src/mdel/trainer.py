@@ -32,7 +32,7 @@ import datasets
 import evaluate
 import torch
 import transformers
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
 from huggingface_hub import ModelCard, Repository
 from transformers import (CONFIG_MAPPING, MODEL_FOR_CAUSAL_LM_MAPPING,
                           AutoConfig, AutoModelForCausalLM, AutoTokenizer,
@@ -285,14 +285,6 @@ def main():
     if sys.argv[-1].endswith(".yaml"):
         model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[-1])
         training_args.local_rank = int(sys.argv[-2][-1])
-        data_args.dataset_name = ['uspto']
-        already_done = os.listdir("full_datasets")
-        todo = list(set(data_args.dataset_name) - set(already_done))
-        print('DATASET',todo[0])
-        data_args.dataset_name = f"Multi-Domain-Expert-Layers/{todo[0]}"
-
-        # training_args.push_to_hub_model_id = f"expert-{os.environ['DATASET']}"
-
     else:
         model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
 
@@ -505,13 +497,13 @@ def main():
         model = AutoModelForCausalLM.from_config(config)
         n_params = sum({p.data_ptr(): p.numel() for p in model.parameters()}.values())
         logger.info(f"Training new model from scratch - Total size={n_params / 2 ** 20:.2f}M params")
-
-    training_layers = [int(layer) for layer in model_args.training_layers.split(",")]
-    # freeze model
-    model.requires_grad_(False)
-    # unfreeze the layer to be trained
-    for layer in training_layers:
-        model.gpt_neox.layers[layer].requires_grad_(True)
+    #
+    # training_layers = [int(layer) for layer in model_args.training_layers.split(",")]
+    # # freeze model
+    # model.requires_grad_(False)
+    # # unfreeze the layer to be trained
+    # for layer in training_layers:
+    #     model.gpt_neox.layers[layer].requires_grad_(True)
 
     # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
     # on a small vocab and want a smaller embedding size, remove this test.
@@ -651,7 +643,24 @@ def main():
             preds = preds[:, :-1].reshape(-1)
             return metric.compute(predictions=preds, references=labels)
 
-    # Initialize our Trainer
+    folder_names = [
+    "arxiv",
+    "freelaw",
+    "github",
+    "philpapers",
+    "pubmed_abstracts",
+    "pubmed_central",
+    "uspto"
+]
+    for i,k in enumerate(folder_names):
+        if i == 0:
+            train_datasets =  load_from_disk("full_datasets/"+k+"/train")
+        else:
+            train_datasets = datasets.concatenate_datasets([train_datasets, load_from_disk("full_datasets/"+k+"/train")])
+    val_datasets = {}
+    for i,k in enumerate(folder_names):
+        val_datasets[k]  =  load_from_disk("full_datasets/"+k+"/val")
+
     trainer = Trainer(
         model=model,
         args=training_args,
@@ -667,44 +676,7 @@ def main():
         else None,
     )
 
-    # Get data
-    train_loader = trainer.get_train_dataloader()
-    eval_loader = trainer.get_eval_dataloader()
-    from torch.utils.data import DataLoader
 
-    def dataloader_to_list(dataloader, num_batches=8000):
-        data = []
-        for idx, batch in enumerate(dataloader):
-            if idx >= num_batches:
-                break
-            data.append(batch)
-        return data
-
-    from datasets import Dataset
-
-    def list_to_hf_dataset(data_list):
-        keys = data_list[0].keys()
-        data_dict = {key: [] for key in keys}
-
-        for batch in data_list:
-            for key in keys:
-                data_dict[key].extend(batch[key].tolist())
-
-        hf_dataset = Dataset.from_dict(data_dict)
-        return hf_dataset
-
-    data_list = dataloader_to_list(train_loader, 8000)
-    hf_dataset = list_to_hf_dataset(data_list)
-    path = f"full_datasets/{data_args.dataset_name.split('/')[-1]}"
-    os.makedirs(path + '/train', exist_ok=True)
-    hf_dataset.save_to_disk(f"full_datasets/{data_args.dataset_name.split('/')[-1]}/train")
-
-    data_list = dataloader_to_list(eval_loader, 1600)
-    hf_dataset = list_to_hf_dataset(data_list)
-    path = f"full_datasets/{data_args.dataset_name.split('/')[-1]}"
-    os.makedirs(path + '/val', exist_ok=True)
-    hf_dataset.save_to_disk(f"full_datasets/{data_args.dataset_name.split('/')[-1]}/val")
-    raise ValueError("Done")
     # Training
     if training_args.do_train:
         checkpoint = None
