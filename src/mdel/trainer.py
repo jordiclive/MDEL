@@ -284,7 +284,7 @@ def main():
 
     if sys.argv[-1].endswith(".yaml"):
         model_args, data_args, training_args, upload_args = parser.parse_yaml_file(sys.argv[-1])
-        training_args.local_rank = sys.argv[-2]
+        training_args.local_rank = int(sys.argv[-2][-1])
         print(sys.argv[-2])
     else:
         model_args, data_args, training_args, upload_args = parser.parse_args_into_dataclasses()
