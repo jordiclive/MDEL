@@ -663,7 +663,7 @@ def main():
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=train_datasets
+        train_dataset=train_datasets,
         eval_dataset=val_datasets,
         tokenizer=tokenizer,
         # Data collator will default to DataCollatorWithPadding, so we change
