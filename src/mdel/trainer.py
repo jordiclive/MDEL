@@ -699,7 +699,7 @@ def main():
     os.makedirs(path + '/train', exist_ok=True)
     hf_dataset.save_to_disk(f"full_datasets/{data_args.dataset_name.split('/')[-1]}/train")
 
-    data_list = dataloader_to_list(eval_loader, 8*200)
+    data_list = dataloader_to_list(eval_loader, 1600)
     hf_dataset = list_to_hf_dataset(data_list)
     path = f"full_datasets/{data_args.dataset_name.split('/')[-1]}"
     os.makedirs(path + '/val', exist_ok=True)
