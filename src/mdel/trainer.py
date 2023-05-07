@@ -656,7 +656,7 @@ def main():
         model=model,
         args=training_args,
         train_dataset=train_dataset if training_args.do_train else None,
-        eval_dataset=eval_datasets if training_args.do_eval else None,
+        eval_dataset=eval_datasets['validation'] if training_args.do_eval else None,
         tokenizer=tokenizer,
         # Data collator will default to DataCollatorWithPadding, so we change
         # it.
