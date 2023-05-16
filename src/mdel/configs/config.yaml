@@ -28,6 +28,7 @@ defaults:
   tokenizer_name:
   use_fast_tokenizer: true
   low_cpu_mem_usage: false
+  eval_steps: 200
 
   # Dataset related settings
   dataset_config_name:
