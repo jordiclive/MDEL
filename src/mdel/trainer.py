@@ -410,7 +410,6 @@ def main():
         )
 
     if training_conf.model_name_or_path:
-        torch_dtype = getattr(torch, training_conf.dtype)
         model = AutoModelForCausalLM.from_pretrained(
             training_conf.model_name_or_path,
             from_tf=bool(".ckpt" in training_conf.model_name_or_path),
@@ -418,7 +417,6 @@ def main():
             cache_dir=training_conf.cache_dir,
             revision=training_conf.model_revision,
             use_auth_token=True if training_conf.use_auth_token else None,
-            torch_dtype=torch_dtype,
             low_cpu_mem_usage=training_conf.low_cpu_mem_usage,
         )
     else:
