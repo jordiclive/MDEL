@@ -24,6 +24,7 @@ defaults:
   wandb_project: "layer-experts"
   # Model and Tokenizer related settings
   model_revision: "main"
+  validation_splits: 
   config_name:
   tokenizer_name:
   use_fast_tokenizer: true
