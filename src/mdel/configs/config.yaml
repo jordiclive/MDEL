@@ -22,9 +22,10 @@ defaults:
   dtype: "float16"
   wandb_entity: "ontocord"
   wandb_project: "layer-experts"
+  wandb_run_name: "default"
   # Model and Tokenizer related settings
   model_revision: "main"
-  validation_splits: 
+  validation_splits:
   config_name:
   tokenizer_name:
   use_fast_tokenizer: true
@@ -52,6 +53,7 @@ defaults:
   log_wandb: true
   cache_dir:
   use_auth_token:
+
 
 
 
