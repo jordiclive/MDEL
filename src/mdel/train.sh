@@ -16,6 +16,7 @@ else
 fi
 
 accelerate launch trainer.py \
+        --configs default   \
         --dataset_name Multi-Domain-Expert-Layers/$DATASET \
         --model_name_or_path EleutherAI/pythia-1b-deduped \
         --output_dir "ckpts/pythia-1b-deduped/$DATASET/layer_$TRAINING_LAYERS" \
