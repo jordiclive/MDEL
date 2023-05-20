@@ -54,9 +54,6 @@ defaults:
   cache_dir:
   use_auth_token:
 
-
-
-
 debug:
   model_name_or_path: "EleutherAI/pythia-70m-deduped"
   output_dir: "layer9"
@@ -82,5 +79,3 @@ debug:
   validation_splits: "validation_pile,validation_domain"
   max_train_samples: 2
   max_eval_samples: 2
-
-

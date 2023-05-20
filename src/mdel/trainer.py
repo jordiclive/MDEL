@@ -25,15 +25,12 @@ import logging
 import math
 import os
 import sys
-from dataclasses import dataclass, field
 from distutils.util import strtobool
 from itertools import chain
 from pathlib import Path
-from typing import Optional
 
 import datasets
 import evaluate
-import torch
 import transformers
 import wandb
 import yaml
@@ -41,14 +38,12 @@ from datasets import load_dataset
 from huggingface_hub import ModelCard, Repository
 from transformers import (CONFIG_MAPPING, MODEL_FOR_CAUSAL_LM_MAPPING,
                           AutoConfig, AutoModelForCausalLM, AutoTokenizer,
-                          HfArgumentParser, Trainer, TrainingArguments,
-                          default_data_collator, is_torch_tpu_available,
-                          set_seed)
+                          Trainer, TrainingArguments, default_data_collator,
+                          is_torch_tpu_available, set_seed)
 from transformers.modelcard import TrainingSummary
 from transformers.testing_utils import CaptureLogger
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.training_args import OptimizerNames
-from transformers.utils import send_example_telemetry
 from transformers.utils.versions import require_version
 from wandb.sdk.lib.runid import generate_id
 
@@ -231,7 +226,8 @@ def main():
                     os.environ["WANDB_ENTITY"] = wandb_api.default_entity
                 run_id = generate_id()
                 os.environ["WANDB_RUN_ID"] = run_id
-                wandb_run_url = f"https://wandb.ai/{training_conf.wandb_entity}/{training_conf.wandb_project}/runs/{run_id}"
+                wandb_run_url = f"https://wandb.ai/{training_conf.wandb_entity}/" \
+                                f"{training_conf.wandb_project}/runs/{run_id}"
 
     # Setup logging
     logging.basicConfig(
@@ -262,9 +258,7 @@ def main():
     # Detecting last checkpoint.
     last_checkpoint = None
     if (
-        os.path.isdir(args.output_dir)
-        and args.do_train
-        and not args.overwrite_output_dir
+        os.path.isdir(args.output_dir) and args.do_train and not args.overwrite_output_dir
     ):
         last_checkpoint = get_last_checkpoint(args.output_dir)
         if last_checkpoint is None and len(os.listdir(args.output_dir)) > 0:
@@ -291,11 +285,8 @@ def main():
             streaming=training_conf.streaming,
         )
         if "validation" not in raw_datasets.keys() and (
-            training_conf.validation_splits is None
-            or all(
-                split not in raw_datasets.keys()
-                for split in training_conf.validation_splits
-            )
+            training_conf.validation_splits is None or all(split not in raw_datasets.keys()
+                                                           for split in training_conf.validation_splits)
         ):
             raw_datasets["validation"] = load_dataset(
                 training_conf.dataset_name,
@@ -338,11 +329,8 @@ def main():
         # If no validation data is there, validation_split_percentage will be
         # used to divide the dataset.
         if "validation" not in raw_datasets.keys() and (
-            training_conf.validation_splits is None
-            or all(
-                split not in raw_datasets.keys()
-                for split in training_conf.validation_splits
-            )
+            training_conf.validation_splits is None or all(split not in raw_datasets.keys()
+                                                           for split in training_conf.validation_splits)
         ):
             raw_datasets["validation"] = load_dataset(
                 extension,
@@ -510,7 +498,7 @@ def main():
             total_length = (total_length // block_size) * block_size
         # Split by chunks of max_len.
         result = {
-            k: [t[i : i + block_size] for i in range(0, total_length, block_size)]
+            k: [t[i: i + block_size] for i in range(0, total_length, block_size)]
             for k, t in concatenated_examples.items()
         }
         result["labels"] = result["input_ids"].copy()
