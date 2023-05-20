@@ -199,6 +199,9 @@ def main():
         report_to="wandb" if training_conf.log_wandb else None,
         do_train=training_conf.do_train,
         do_eval=training_conf.do_eval,
+        push_to_hub=training_conf.push_to_hub,
+        push_to_hub_model_id=training_conf.push_to_hub_model_id,
+        push_to_hub_organization=training_conf.push_to_hub_organization,
     )
 
     if len(args.report_to) >= 1 and args.local_rank == 0:

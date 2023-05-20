@@ -54,6 +54,12 @@ defaults:
   cache_dir:
   use_auth_token:
 
+  push_to_hub:
+  push_to_hub_organization:
+  push_to_hub_model_id:
+
+  max_steps: -1
+
 debug:
   model_name_or_path: "EleutherAI/pythia-70m-deduped"
   output_dir: "layer9"
