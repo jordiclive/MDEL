@@ -37,4 +37,8 @@ accelerate launch trainer.py \
         --max_steps 1000 \
         --push_to_hub true \
         --push_to_hub_model_id expert-$DATASET \
-        --push_to_hub_organization Multi-Domain-Expert-Layers
+        --push_to_hub_organization Multi-Domain-Expert-Layers \
+        --wandb_entity $WANDB_ENTITY \
+        --wandb_project $WANDB_PROJECT \
+        --wandb_run_name $WANDB_NAME
+
