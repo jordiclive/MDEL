@@ -38,5 +38,6 @@ accelerate launch trainer.py \
         --wandb_entity $WANDB_ENTITY \
         --wandb_project $WANDB_PROJECT \
         --wandb_run_name $WANDB_NAME \
+        --validation_splits "validation_pile,validation_domain" \
         --no_deepspeed
 
