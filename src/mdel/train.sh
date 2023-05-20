@@ -16,7 +16,7 @@ else
 fi
 
 accelerate launch trainer.py \
-        --configs default   \
+        --configs defaults   \
         --dataset_name Multi-Domain-Expert-Layers/$DATASET \
         --model_name_or_path EleutherAI/pythia-1b-deduped \
         --output_dir "ckpts/pythia-1b-deduped/$DATASET/layer_$TRAINING_LAYERS" \
@@ -41,5 +41,5 @@ accelerate launch trainer.py \
         --wandb_entity $WANDB_ENTITY \
         --wandb_project $WANDB_PROJECT \
         --wandb_run_name $WANDB_NAME \
-        --no_deepspeed 
+        --no_deepspeed
 
