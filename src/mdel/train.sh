@@ -28,8 +28,6 @@ accelerate launch trainer.py \
         --block_size 512 \
         --num_train_epochs 1 \
         --gradient_accumulation_steps 8 \
-        --do_train \
-        --do_eval \
         --evaluation_strategy steps \
         --eval_steps 200 \
         --overwrite_output_dir \
