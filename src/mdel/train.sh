@@ -30,7 +30,6 @@ accelerate launch trainer.py \
         --gradient_accumulation_steps 8 \
         --evaluation_strategy steps \
         --eval_steps 200 \
-        --overwrite_output_dir \
         --logging_steps 20 \
         --max_steps 1000 \
         --push_to_hub true \
