@@ -96,7 +96,7 @@ def argument_parsing(notebook=False, notebook_args=None):
     )
     parser.add_argument("--local_rank", type=int, default=-1)
     parser.add_argument("--deepspeed", action="store_true")
-    parser.add_argument("--no-deepspeed", dest="deepspeed", action="store_false")
+    parser.add_argument("--no-deepspeed", dest="deepspeed", action="store_true")
     parser.add_argument("--wandb-entity", type=str, default="open-assistant")
     parser.add_argument(
         "--resume_from_checkpoint",
@@ -135,6 +135,8 @@ def argument_parsing(notebook=False, notebook_args=None):
     conf["wandb_entity"] = args.wandb_entity
     conf["local_rank"] = args.local_rank
     conf["deepspeed"] = args.deepspeed
+    if conf['no_deepspeed'] == True:
+        conf['deepspeed'] = None
     conf["resume_from_checkpoint"] = args.resume_from_checkpoint
     if args.rng_seed is not None:
         conf["rng_seed"] = args.rng_seed

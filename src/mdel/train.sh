@@ -40,5 +40,6 @@ accelerate launch trainer.py \
         --push_to_hub_organization Multi-Domain-Expert-Layers \
         --wandb_entity $WANDB_ENTITY \
         --wandb_project $WANDB_PROJECT \
-        --wandb_run_name $WANDB_NAME
+        --wandb_run_name $WANDB_NAME \
+        --no_deepspeed 
 

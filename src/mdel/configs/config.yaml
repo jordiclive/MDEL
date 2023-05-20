@@ -16,7 +16,7 @@ defaults:
   save_total_limit: 2
   max_grad_norm: 2.0
   save_steps: 500
-#  deepspeed: "configs/zero_config.json"
+  deepspeed: "configs/zero_config.json"
   overwrite_output_dir: true
   logging_steps: 20
   dtype: "float16"
